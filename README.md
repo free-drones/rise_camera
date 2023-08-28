@@ -38,15 +38,23 @@ If you want to stop recording in advance, open an other terminal and execute sto
 ```
 
 # live stream
-To also enable live streaming, we use the open source project rtsp-simple-server, https://github.com/aler9/rtsp-simple-server
+To also enable live streaming, we use the open source project mediamtx (earlier rtsp-simple-server), https://github.com/bluenviron/mediamtx
+
 
 Setup camera as non legacy camera, (should already be done).
 Sudo Raspi-config, interfaces, camera, non-legacy. Reboot.
 
-Get binary from release page, extract it:
+Get binary from release page, extract it. This binary is for a RaspberryPi4 with 64-bit OS.
+```
+wget -c  https://github.com/bluenviron/mediamtx/releases/download/v1.0.0/mediamtx_v1.0.0_linux_arm64v8.tar.gz -O - | tar -xz
+```
+
+This outdated version whats is tested earliers and works good for the Raspberry 3Bplus, 32bit OS, but try the 1+ versions first..
 ```
 wget -c  https://github.com/aler9/rtsp-simple-server/releases/download/v0.21.6/rtsp-simple-server_v0.21.6_linux_armv7.tar.gz -O - | tar -xz
 ```
+
+
 Move binary to /usr/local/bin/
 
 Move config (.yml) to /usr/local/etc/
@@ -225,21 +233,24 @@ These are the crucial settings for not occupying the camera more than wanted. We
 
 Create service:
 ```
-sudo tee /etc/systemd/system/rtsp-simple-server.service >/dev/null << EOF
-[Unit]After=network.target
-[Service]ExecStart=/usr/local/bin/rtsp-simple-server /usr/local/etc/rtsp-simple-server.yml
-[Install]WantedBy=multi-user.target
+sudo tee /etc/systemd/system/mediamtx.service >/dev/null << EOF
+[Unit]
+After=network.target
+[Service]
+ExecStart=/usr/local/bin/mediamtx /usr/local/etc/mediamtx.yml
+[Install]
+WantedBy=multi-user.target
 EOF
 ```
 
 Start service to test
 ```
-sudo systemctl start rtsp-simple-server.service
+sudo systemctl start mediamtx.service
 ```
 
 If succesful enable the service
 ```
-sudo systemctl enable rtsp-simple-server.service
+sudo systemctl enable mediamtx.service
 ```
 
 Look at stream at http://ip_of_the_pi:8889/stream/
