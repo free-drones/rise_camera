@@ -82,9 +82,9 @@ paths:
     # height of frames
     rpiCameraHeight: 1080
     # flip horizontally
-    rpiCameraHFlip: true
+    rpiCameraHFlip: false
     # flip vertically
-    rpiCameraVFlip: true
+    rpiCameraVFlip: false
     # brightness [-1, 1]
     rpiCameraBrightness: 0
     # contrast [0, 16]
@@ -230,6 +230,9 @@ These are the crucial settings for not occupying the camera more than wanted. We
     # readers connected and this amount of time has passed.
     sourceOnDemandCloseAfter: 3s
 ```
+Make sure to upgrade to latest 'libcamera' release
+
+```sudo apt update && sudo apt install libcamera0```
 
 Create service:
 ```
